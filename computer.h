@@ -1,0 +1,4 @@
+#ifndef OOASM_COMPUTER_H
+#define OOASM_COMPUTER_H
+
+#endif //OOASM_COMPUTER_H
