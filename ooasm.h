@@ -136,12 +136,12 @@ public:
     program(std::initializer_list<Function> init_list) : vec(init_list) {}
     using iterator = typename std::vector<Function>::iterator;
 
-    iterator begin() const noexcept {
-        return vec.begin(); //fixme : Does not work yet dunno why
+    iterator begin() noexcept {
+        return vec.begin();
     };
 
-    iterator end() const noexcept {
-        return vec.end(); //fixme : Does not work yes dunno why
+    iterator end() noexcept {
+        return vec.end();
     };
 };
 
