@@ -38,7 +38,7 @@ public:
         execute_functions(p);
     }
 
-    void memory_dump(std::ostream& os) {
+    void memory_dump(std::ostream& os) const {
         for (auto a : cm.mem) {
         //    os << a;
         }
