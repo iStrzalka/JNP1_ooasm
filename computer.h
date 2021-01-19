@@ -13,8 +13,8 @@ private:
     //Executes all declarations of the program.
     void declare_vars(program &p) {
         for (auto command : p) {
-            if (command.is_definition()) {
-                command.execute(cm);
+            if ((*command).is_definition()) {
+                (*command).execute(cm);
             }
         }
     }
@@ -22,8 +22,8 @@ private:
     //Executes all functions that aren't declarations.
     void execute_functions(program &p) {
         for (auto command : p) {
-            if (!command.is_definition()) {
-                command.execute(cm);
+            if (!(*command).is_definition()) {
+                (*command).execute(cm);
             }
         }
     }
@@ -44,6 +44,5 @@ public:
         }
     }
 };
-
 
 #endif //OOASM_COMPUTER_H
