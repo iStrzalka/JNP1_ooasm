@@ -23,9 +23,9 @@ struct ComputerMemory {
     vars_size_t size = -1;
 
     void setup(const int &_size) {
+        vars = vars_memory_t(_size);
+        mem = memory_t(_size);
         size = _size;
-        vars.reserve(_size);
-        mem.reserve(_size);
     }
 
     // Assigns the identifier to one of memory's cells.

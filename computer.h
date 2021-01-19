@@ -3,6 +3,7 @@
 
 #include <array>
 #include <vector>
+#include <ostream>
 #include "ooasm.h"
 #include "computer_memory.h"
 
@@ -13,8 +14,8 @@ private:
     //Executes all declarations of the program.
     void declare_vars(program &p) {
         for (auto command : p) {
-            if (command.is_definition()) {
-                command.execute(cm);
+            if (command->is_definition()) {
+                command->execute(cm);
             }
         }
     }
@@ -22,8 +23,8 @@ private:
     //Executes all functions that aren't declarations.
     void execute_functions(program &p) {
         for (auto command : p) {
-            if (!command.is_definition()) {
-                command.execute(cm);
+            if (!command->is_definition()) {
+                command->execute(cm);
             }
         }
     }
@@ -40,7 +41,7 @@ public:
 
     void memory_dump(std::ostream& os) const {
         for (auto a : cm.mem) {
-        //    os << a;
+            os << a << ' ';
         }
     }
 };
