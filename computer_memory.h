@@ -2,10 +2,8 @@
 #define OOASM_COMPUTER_MEMORY_H
 
 // Memory of the computer.
-#include <cstdint>
 #include <vector>
 #include <unordered_map>
-#include <stdexcept>
 
 using flag_t = bool;
 using memory_word_t = int64_t;
@@ -13,7 +11,6 @@ using identifier_t = uint64_t;
 
 struct ComputerMemory {
     using memory_t = std::vector<memory_word_t>;
-    //using vars_memory_t = std::vector<identifier_t>;
     using vars_memory_t = std::unordered_map<identifier_t, identifier_t>;
     using vars_size_t = typename vars_memory_t::size_type;
 
@@ -46,11 +43,6 @@ struct ComputerMemory {
     // Finds which index of the memory identifier is assigned to and returns it.
     // Throws an error if it can't find it.
     [[nodiscard]] vars_size_t idx(identifier_t id) const {
-//        for (vars_size_t i = 0; i < size; i++) {
-//            if (vars[i] == id) {
-//                return i;
-//            }
-//        }
         auto it = vars.find(id);
         if (it != vars.end())
             return it->second;

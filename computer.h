@@ -1,8 +1,6 @@
 #ifndef OOASM_COMPUTER_H
 #define OOASM_COMPUTER_H
 
-#include <array>
-#include <vector>
 #include <ostream>
 #include "ooasm.h"
 #include "computer_memory.h"
@@ -11,7 +9,7 @@ class Computer {
 private:
     ComputerMemory cm;
 
-    //Executes all declarations of the program.
+    // Executes all declarations of the program.
     void declare_vars(program &p) {
         for (const auto &command : p) {
             if (command->is_definition()) {
@@ -20,7 +18,7 @@ private:
         }
     }
 
-    //Executes all functions that aren't declarations.
+    // Executes all functions that aren't declarations.
     void execute_functions(program &p) {
         for (const auto &command : p) {
             if (!command->is_definition()) {
