@@ -37,7 +37,9 @@ struct ComputerMemory {
             throw std::invalid_argument("Too many variables");
 
         //vars[last_index] = id;
-        vars[id] = last_index;
+        if (vars.find(id) == vars.end())
+            vars[id] = last_index;
+
         return last_index++;
     }
 
