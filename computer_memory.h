@@ -23,9 +23,9 @@ struct ComputerMemory {
     vars_size_t size = -1;
 
     void setup(const int &_size) {
+        vars = vars_memory_t(_size);
+        mem = memory_t(_size);
         size = _size;
-        vars.reserve(_size);
-        mem.reserve(_size);
     }
 
     // Assigns the identifier to one of memory's cells.
@@ -47,6 +47,13 @@ struct ComputerMemory {
             }
         }
         throw std::invalid_argument("Variable not found");
+    }
+
+    // Returns memory at index [index]. Throws an error if it is out of bounds.
+    memory_word_t &at(vars_size_t index) {
+        if (index > size)
+            throw std::invalid_argument("Out of bounds");
+        return mem[index];
     }
 
     // Sets the flag ZF based on last changed value.
