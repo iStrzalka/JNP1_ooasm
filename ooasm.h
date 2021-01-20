@@ -35,7 +35,7 @@ class RValue {
     friend class Computer;
 
 public:
-    virtual int get_value([[maybe_unused]] ComputerMemory &m) const = 0;
+    virtual int get_value([[maybe_unused]] ComputerMemory &mem) const = 0;
 
     virtual ~RValue() = default;
 };
@@ -44,11 +44,11 @@ class LValue { // są pure pure virtual wiec nie potrzebują chyba wirtualnych d
     friend class Computer;
 
 public:
-    virtual memory_word_t &get_reference(ComputerMemory &m) const = 0;
+    virtual memory_word_t &get_reference(ComputerMemory &mem) const = 0;
 
     virtual ~LValue() = default;
 
-    virtual int get_value([[maybe_unused]] ComputerMemory &m) const = 0;
+    virtual int get_value([[maybe_unused]] ComputerMemory &mem) const = 0;
 };
 
 class Num : public RValue {
@@ -85,7 +85,7 @@ class Mem : public LValue, public RValue {
 private:
     std::shared_ptr<RValue> rval;
 public:
-    explicit Mem(std::shared_ptr<RValue> x) : rval(std::move(x)) {}
+    explicit Mem(std::shared_ptr<RValue>& x) : rval(std::move(x)) {}
 
     int get_value(ComputerMemory &mem) const override {
         return mem.at(rval->get_value(mem));
@@ -96,7 +96,7 @@ public:
     }
 };
 
-std::shared_ptr<Mem> mem(const std::shared_ptr<RValue>& x) {
+std::shared_ptr<Mem> mem(std::shared_ptr<RValue> x) {
     return std::make_shared<Mem>(x);
 }
 
@@ -104,7 +104,7 @@ class Function {
 protected:
     bool definition = false;
 public:
-    virtual void execute(ComputerMemory &m) = 0;
+    virtual void execute(ComputerMemory &mem) = 0;
 
     virtual ~Function() = default;
 
@@ -118,7 +118,7 @@ private:
     identifier_t data_id;
     std::shared_ptr<Num> data_num;
 public:
-    Data(const char *input, std::shared_ptr<Num> _num) : data_id(Id(input)), data_num(_num) {
+    Data(const char *input, std::shared_ptr<Num>& _num) : data_id(Id(input)), data_num(_num) {
         definition = true;
     }
 
@@ -136,11 +136,11 @@ private:
     std::shared_ptr<LValue> lval;
     std::shared_ptr<RValue> rval;
 public:
-    explicit Mov(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) : lval(_lval),
+    explicit Mov(std::shared_ptr<LValue>& _lval, std::shared_ptr<RValue>& _rval) : lval(_lval),
                                                                                  rval(_rval) {}
 
-    void execute(ComputerMemory &m) override {
-        lval->get_reference(m) = rval->get_value(m);
+    void execute(ComputerMemory &mem) override {
+        lval->get_reference(mem) = rval->get_value(mem);
     }
 };
 
@@ -154,8 +154,10 @@ protected:
     std::shared_ptr<RValue> rval;
     bool negate = false;
 
-    explicit Arithmetic(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) : lval(_lval),
+    explicit Arithmetic(std::shared_ptr<LValue>& _lval, std::shared_ptr<RValue>& _rval) : lval(_lval),
                                                                                         rval(_rval) {}
+    explicit Arithmetic(std::shared_ptr<LValue>& _lval, std::shared_ptr<RValue>&& _rval) : lval(_lval),
+                                                                                          rval(_rval) {}
 
     void execute(ComputerMemory &mem) override {
         auto &lref = lval->get_reference(mem);
@@ -170,7 +172,7 @@ protected:
 
 class Add : public Arithmetic {
 public:
-    explicit Add(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) : Arithmetic(_lval,
+    explicit Add(std::shared_ptr<LValue>& _lval, std::shared_ptr<RValue>& _rval) : Arithmetic(_lval,
                                                                                             _rval) {}
 };
 
@@ -180,7 +182,7 @@ std::shared_ptr<Add> add(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> 
 
 class Sub : public Arithmetic {
 public:
-    explicit Sub(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) : Arithmetic(_lval,
+    explicit Sub(std::shared_ptr<LValue>& _lval, std::shared_ptr<RValue>& _rval) : Arithmetic(_lval,
                                                                                             _rval) {
         negate = true;
     }
@@ -192,7 +194,7 @@ std::shared_ptr<Sub> sub(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> 
 
 class Inc : public Arithmetic {
 public:
-    explicit Inc(std::shared_ptr<LValue> _lval) : Arithmetic(_lval, num(1)) {}
+    explicit Inc(std::shared_ptr<LValue>& _lval) : Arithmetic(_lval, num(1)) {}
 };
 
 std::shared_ptr<Inc> inc(std::shared_ptr<LValue> _lval) {
@@ -201,7 +203,7 @@ std::shared_ptr<Inc> inc(std::shared_ptr<LValue> _lval) {
 
 class Dec : public Arithmetic {
 public:
-    explicit Dec(std::shared_ptr<LValue> _lval) : Arithmetic(_lval, num(1)) {
+    explicit Dec(std::shared_ptr<LValue>& _lval) : Arithmetic(_lval, num(1)) {
         negate = true;
     }
 };
@@ -214,15 +216,15 @@ class Flagged : public Function { //Fixme : Better name for that.
 protected:
     std::shared_ptr<LValue> lval;
 
-    explicit Flagged(std::shared_ptr<LValue> _lval) : lval(_lval) {}
+    explicit Flagged(std::shared_ptr<LValue>& _lval) : lval(_lval) {}
 };
 
 class One : public Flagged {
 public:
-    explicit One(std::shared_ptr<LValue> _lval) : Flagged(_lval) {}
+    explicit One(std::shared_ptr<LValue>& _lval) : Flagged(_lval) {}
 
-    void execute(ComputerMemory &m) override {
-        lval->get_reference(m) = 1;
+    void execute(ComputerMemory &mem) override {
+        lval->get_reference(mem) = 1;
     }
 };
 
@@ -232,11 +234,11 @@ std::shared_ptr<One> one(std::shared_ptr<LValue> _lval) {
 
 class Ones : public Flagged {
 public:
-    explicit Ones(std::shared_ptr<LValue> _lval) : Flagged(_lval) {}
+    explicit Ones(std::shared_ptr<LValue>& _lval) : Flagged(_lval) {}
 
-    void execute(ComputerMemory &m) override {
-        if (m.is_flag_SF_set()) {
-            lval->get_reference(m) = 1;
+    void execute(ComputerMemory &mem) override {
+        if (mem.is_flag_SF_set()) {
+            lval->get_reference(mem) = 1;
         }
     }
 };
@@ -247,11 +249,11 @@ std::shared_ptr<Ones> ones(std::shared_ptr<LValue> _lval) {
 
 class Onez : public Flagged {
 public:
-    explicit Onez(std::shared_ptr<LValue> _lval) : Flagged(_lval) {}
+    explicit Onez(std::shared_ptr<LValue>& _lval) : Flagged(_lval) {}
 
-    void execute(ComputerMemory &m) override {
-        if (m.is_flag_ZF_set()) {
-            lval->get_reference(m) = 1;
+    void execute(ComputerMemory &mem) override {
+        if (mem.is_flag_ZF_set()) {
+            lval->get_reference(mem) = 1;
         }
     }
 };
