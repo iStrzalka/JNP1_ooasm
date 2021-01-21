@@ -16,6 +16,7 @@ identifier_t Id(const char *input) {
 
     if (input == nullptr || input[0] == '\0')
         throw std::invalid_argument("Input should be not empty nor NULL");
+    
     identifier_t base2 = 1;
     for (std::size_t i = 0; input[i] != '\0'; i++) {
         if (i == 10)
@@ -171,11 +172,12 @@ protected:
 
     void execute(ComputerMemory &mem) override {
         auto &lref = lval->get_reference(mem);
-        if (negate) {
+        
+        if (negate)
             lref -= rval->get_value(mem);
-        } else {
+        else
             lref += rval->get_value(mem);
-        }
+        
         mem.set_flags(lref);
     }
 };
@@ -261,9 +263,9 @@ public:
     explicit Ones(std::shared_ptr<LValue> &_lval) : Flagged(_lval) {}
 
     void execute(ComputerMemory &mem) override {
-        if (mem.is_flag_SF_set()) {
+        if (mem.is_flag_SF_set())
             lval->get_reference(mem) = 1;
-        }
+        
     }
 };
 
@@ -278,9 +280,9 @@ public:
     explicit Onez(std::shared_ptr<LValue> &_lval) : Flagged(_lval) {}
 
     void execute(ComputerMemory &mem) override {
-        if (mem.is_flag_ZF_set()) {
+        if (mem.is_flag_ZF_set())
             lval->get_reference(mem) = 1;
-        }
+        
     }
 };
 
