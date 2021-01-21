@@ -43,6 +43,7 @@ struct ComputerMemory {
     // Throws an error if it can't find it.
     [[nodiscard]] vars_size_t idx(identifier_t id) const {
         auto it = vars.find(id);
+        
         if (it != vars.end())
             return it->second;
         else
@@ -53,6 +54,7 @@ struct ComputerMemory {
     memory_word_t &at(vars_size_t index) {
         if (index > size)
             throw std::invalid_argument("Out of bounds");
+        
         return mem[index];
     }
 
