@@ -11,7 +11,7 @@ using identifier_t = uint64_t;
 
 struct ComputerMemory {
     using memory_t = std::vector<memory_word_t>;
-    using vars_memory_t = std::unordered_map<identifier_t, uint64_t>;
+    using vars_memory_t = std::unordered_map<identifier_t, memory_t::size_type>;
     using vars_size_t = typename vars_memory_t::size_type;
 
     vars_memory_t vars;
