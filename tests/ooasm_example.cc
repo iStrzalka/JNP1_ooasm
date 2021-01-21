@@ -1,24 +1,39 @@
-#include "ooasm.h"
 #include "computer.h"
-#include <string>
-#include <sstream>
+#include "ooasm.h"
 #include <cassert>
+#include <sstream>
+#include <string>
 
 namespace {
-    std::string memory_dump(Computer const& computer) {
+    std::string memory_dump(Computer const &computer) {
         std::stringstream ss;
         computer.memory_dump(ss);
         return ss.str();
     }
+} // namespace
+
+void extra_tests() {
+    auto ooasm_empty = program({});
+    Computer computer0(3);
+    computer0.boot(ooasm_empty);
+    assert(memory_dump(computer0) == "0 0 0 ");
+
+    auto ooasm_add = program({inc(mem(num(0)))});
+    Computer computer1(3);
+    computer1.boot(ooasm_add);
+    assert(memory_dump(computer1) == "1 0 0 ");
 }
 
 int main() {
+    extra_tests();
+
     auto ooasm_move = program({
         mov(mem(num(0)), num(42))
     });
     Computer computer1(1);
     computer1.boot(ooasm_move);
     assert(memory_dump(computer1) == "42 ");
+
 
     auto ooasm_ones = program({
         dec(mem(num(1))),
@@ -51,4 +66,5 @@ int main() {
     Computer computer4(5);
     computer4.boot(ooasm_operations);
     assert(memory_dump(computer4) == "6 2 0 0 0 ");
+
 }
