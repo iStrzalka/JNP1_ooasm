@@ -14,14 +14,14 @@ identifier_t Id(const char *input) {
     identifier_t base = 601;
     identifier_t x = 1;
 
-    if (input[0] == '\0')
-        throw std::invalid_argument("Input should be not empty");
+    if (input == nullptr || input[0] == '\0')
+        throw std::invalid_argument("Input should be not empty nor NULL");
     identifier_t base2 = 1;
     for (std::size_t i = 0; input[i] != '\0'; i++) {
         if (i == 10)
             throw std::invalid_argument("Input's size is over the limit of 10 characters");
 
-        u_int16_t integer = input[i];
+        uint8_t integer = input[i];
 
         x += base2 * (integer + 1);
         base2 *= base;
