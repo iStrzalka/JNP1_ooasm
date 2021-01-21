@@ -35,7 +35,7 @@ identifier_t Id(const char *input) {
 // Designed as virtual class to return the value to what it is pointing to.
 class RValue {
 public:
-    virtual int get_value([[maybe_unused]] ComputerMemory &mem) const = 0;
+    virtual memory_word_t get_value([[maybe_unused]] ComputerMemory &mem) const = 0;
 
     virtual ~RValue() = default;
 };
@@ -51,11 +51,11 @@ public:
 // Designed as a class that inherits from RValue to return its value.
 class Num : public RValue {
 private:
-    int64_t value;
+    memory_word_t value;
 public:
-    explicit Num(int64_t val) : value(val) {}
+    explicit Num(memory_word_t val) : value(val) {}
 
-    int get_value([[maybe_unused]] ComputerMemory &mem) const override {
+    memory_word_t get_value([[maybe_unused]] ComputerMemory &mem) const override {
         return value;
     };
 };
@@ -72,7 +72,7 @@ private:
 public:
     explicit Lea(const char *_id) : id(Id(_id)) {}
 
-    int get_value(ComputerMemory &mem) const override {
+    memory_word_t get_value(ComputerMemory &mem) const override {
         return mem.idx(id);
     };
 };
@@ -90,7 +90,7 @@ private:
 public:
     explicit Mem(std::shared_ptr<RValue> &x) : rval(std::move(x)) {}
 
-    int get_value(ComputerMemory &mem) const override {
+    memory_word_t get_value(ComputerMemory &mem) const override {
         return mem.at(rval->get_value(mem));
     };
 
