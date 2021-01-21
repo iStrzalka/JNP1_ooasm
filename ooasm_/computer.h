@@ -12,18 +12,16 @@ private:
     // Executes all declarations of the program.
     void declare_vars(program &p) {
         for (const auto &command : p) {
-            if (command->is_definition()) {
+            if (command->is_definition())
                 command->execute(cm);
-            }
         }
     }
 
     // Executes all functions that aren't declarations.
     void execute_functions(program &p) {
         for (const auto &command : p) {
-            if (!command->is_definition()) {
+            if (!command->is_definition())
                 command->execute(cm);
-            }
         }
     }
 
