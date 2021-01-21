@@ -265,7 +265,6 @@ public:
     void execute(ComputerMemory &mem) override {
         if (mem.is_flag_SF_set())
             lval->get_reference(mem) = 1;
-        
     }
 };
 
@@ -282,7 +281,6 @@ public:
     void execute(ComputerMemory &mem) override {
         if (mem.is_flag_ZF_set())
             lval->get_reference(mem) = 1;
-        
     }
 };
 
