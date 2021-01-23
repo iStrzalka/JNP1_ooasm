@@ -60,7 +60,7 @@ public:
     };
 };
 
-std::shared_ptr<Num> num(int64_t val) {
+inline std::shared_ptr<Num> num(int64_t val) {
     return std::make_shared<Num>(val);
 }
 
@@ -77,7 +77,7 @@ public:
     };
 };
 
-std::shared_ptr<Lea> lea(const char *_id) {
+inline std::shared_ptr<Lea> lea(const char *_id) {
     return std::make_shared<Lea>(_id);
 }
 
@@ -99,7 +99,7 @@ public:
     }
 };
 
-std::shared_ptr<Mem> mem(std::shared_ptr<RValue> x) {
+inline std::shared_ptr<Mem> mem(std::shared_ptr<RValue> x) {
     return std::make_shared<Mem>(x);
 }
 
@@ -133,7 +133,7 @@ public:
     }
 };
 
-std::shared_ptr<Data> data(const char *input, std::shared_ptr<Num> _num) {
+inline std::shared_ptr<Data> data(const char *input, std::shared_ptr<Num> _num) {
     return std::make_shared<Data>(input, _num);
 }
 
@@ -152,7 +152,7 @@ public:
     }
 };
 
-std::shared_ptr<Mov> mov(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
+inline std::shared_ptr<Mov> mov(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
     return std::make_shared<Mov>(_lval, _rval);
 }
 
@@ -190,7 +190,7 @@ public:
                  std::shared_ptr<RValue> &_rval) : Arithmetic(_lval, _rval) {}
 };
 
-std::shared_ptr<Add> add(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
+inline std::shared_ptr<Add> add(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
     return std::make_shared<Add>(_lval, _rval);
 }
 
@@ -204,7 +204,7 @@ public:
     }
 };
 
-std::shared_ptr<Sub> sub(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
+inline std::shared_ptr<Sub> sub(std::shared_ptr<LValue> _lval, std::shared_ptr<RValue> _rval) {
     return std::make_shared<Sub>(_lval, _rval);
 }
 
@@ -215,7 +215,7 @@ public:
     explicit Inc(std::shared_ptr<LValue> &_lval) : Arithmetic(_lval, num(1)) {}
 };
 
-std::shared_ptr<Inc> inc(std::shared_ptr<LValue> _lval) {
+inline std::shared_ptr<Inc> inc(std::shared_ptr<LValue> _lval) {
     return std::make_shared<Inc>(_lval);
 }
 
@@ -228,7 +228,7 @@ public:
     }
 };
 
-std::shared_ptr<Dec> dec(std::shared_ptr<LValue> _lval) {
+inline std::shared_ptr<Dec> dec(std::shared_ptr<LValue> _lval) {
     return std::make_shared<Dec>(_lval);
 }
 
@@ -252,7 +252,7 @@ public:
     }
 };
 
-std::shared_ptr<One> one(std::shared_ptr<LValue> _lval) {
+inline std::shared_ptr<One> one(std::shared_ptr<LValue> _lval) {
     return std::make_shared<One>(_lval);
 }
 
@@ -268,7 +268,7 @@ public:
     }
 };
 
-std::shared_ptr<Ones> ones(std::shared_ptr<LValue> _lval) {
+inline std::shared_ptr<Ones> ones(std::shared_ptr<LValue> _lval) {
     return std::make_shared<Ones>(_lval);
 }
 
@@ -284,7 +284,7 @@ public:
     }
 };
 
-std::shared_ptr<Onez> onez(std::shared_ptr<LValue> _lval) {
+inline std::shared_ptr<Onez> onez(std::shared_ptr<LValue> _lval) {
     return std::make_shared<Onez>(_lval);
 }
 
