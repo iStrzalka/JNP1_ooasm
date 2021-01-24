@@ -87,3 +87,4 @@ namespace ooasm {
 }
 
 #endif //OOASM_COMPUTER_MEMORY_H
+
